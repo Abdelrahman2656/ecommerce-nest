@@ -1,6 +1,6 @@
 import { Controller, Get, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { Auth } from "src/Auth/common";
+import { Auth } from "src/common";
 
 
 @Controller('user')

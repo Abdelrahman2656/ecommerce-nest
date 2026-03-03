@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from 'DB/Models/User/user.repository';
 import { LoginDTO, SignUpDTO } from './dto';
-import { compare, hash, sendEmail } from './common';
+import { compare, hash, sendEmail } from '../common';
 import { randomInt } from 'crypto';
 import { TUser } from 'DB/Models/User/user.schema';
-import { TokenService } from './common/Service';
+import { TokenService } from '../common/Service';
 
 @Injectable()
 export class AuthService {

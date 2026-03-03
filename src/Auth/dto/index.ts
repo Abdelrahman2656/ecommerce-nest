@@ -1,5 +1,5 @@
 import { IsEmail,  IsEnum,  IsNotEmpty,  IsOptional,  IsString, IsStrongPassword, MinLength } from 'class-validator';
-import { UserRole } from '../common';
+import { UserRole } from '../../common';
 
 export class SignUpDTO {
   @IsString()
