@@ -1,2 +1,3 @@
 export * from './decorator.composition'
 export * from './roles.decorator'
+export * from './user.decorator'
