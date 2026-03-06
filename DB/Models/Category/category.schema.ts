@@ -25,6 +25,8 @@ export class Category implements IICategory{
   slug: string;
   @Prop({ type: { secure_url: String, public_id: String } })
   image: IImage;
+  @Prop({type:String})
+  folderId:string
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User', required: true })
   createdBy: Types.ObjectId;
 }

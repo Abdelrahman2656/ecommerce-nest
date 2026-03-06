@@ -57,10 +57,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Password');
     }
     //token
-    const token = this.tokenService.sign(
+    const access_token = this.tokenService.sign(
       { _id: userExistence._id },
-      { secret: process.env.SECRET_KEY, expiresIn: '1h' },
+      { secret: process.env.SECRET_KEY, expiresIn: '3d' },
     );
-    return token;
+    return access_token;
   }
 }

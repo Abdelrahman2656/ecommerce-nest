@@ -12,7 +12,8 @@ import { UserModule } from './User/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:resolve('./.env')
+      envFilePath:resolve('./.env'),
+      isGlobal:true
     }
     ),
     ThrottlerModule.forRoot({
