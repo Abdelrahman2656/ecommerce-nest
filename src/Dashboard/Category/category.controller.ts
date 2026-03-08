@@ -5,9 +5,11 @@ import { CreateCategoryDTO } from "./DTO";
 import { User } from "src/common/Decorator/user.decorator";
 import type{ TUser } from "DB/Models/User/user.schema";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiTags } from "@nestjs/swagger";
 
 
 @Controller('dashboard/category')
+@ApiTags("Category Group")
 @Auth(UserRole.ADMIN)
 export class CategoryController {
     constructor(private readonly categoryService:CategoryService){}
