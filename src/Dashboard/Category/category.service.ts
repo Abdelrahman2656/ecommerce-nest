@@ -9,10 +9,10 @@ import { TCategory } from "DB/Models/Category/category.schema";
 export class CategoryService {
     constructor(private categoryRepository:CategoryRepository , private readonly cloudServices:CloudServices){}
 //create
-async create(CreateCategoryDTO:CreateCategoryDTO , user:TUser ,file:Express.Multer.File):Promise<TCategory>{
+async create(CreateCategoryDTO:CreateCategoryDTO , user:TUser):Promise<TCategory>{
 //get data
  
-const{name}= CreateCategoryDTO
+const{name ,image}= CreateCategoryDTO
 const authUser = user._id
 
 //check existence
@@ -23,15 +23,16 @@ const authUser = user._id
  if(categoryExist){
 throw new ConflictException(messages.category.alreadyExist)
  }
- //upload image
- const folderId=Math.ceil(Math.random() * 1000 + 9999).toString()
- const {secure_url,public_id}= await this.cloudServices.upload({path:file.path , folder:`Ecommerce-Nest/User/${authUser}/Category/${folderId}`})
+
  //prepare data
  const category ={
     name , 
     createdBy:authUser,
-    folderId,
-    image:{secure_url,public_id}
+    folderId:image.folderId,
+    image:{
+        secure_url:image.secure_url,
+        public_id:image.public_id
+    }
  }
  const createdCategory = await this.categoryRepository.create(category)
  if(!createdCategory){
