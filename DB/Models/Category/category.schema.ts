@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SchemaTypes, Types } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import slugify from 'slugify';
 import { IICategory } from './category.interface';
 
@@ -32,4 +32,4 @@ export class Category implements IICategory{
 }
 export const categorySchema = SchemaFactory.createForClass(Category);
 //type
-export type TCategory = Category & Document;
+export type TCategory = HydratedDocument<Category> & Document;

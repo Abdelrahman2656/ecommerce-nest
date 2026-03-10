@@ -1,6 +1,7 @@
 import {
     IsNotEmpty,
     IsObject,
+    IsOptional,
     IsString,
     MaxLength,
     MinLength,
@@ -20,4 +21,15 @@ export class CreateCategoryDTO {
   name: string;
   @IsObject()
   image: IImage;
+}
+
+//update category
+export class UpdateCategoryDTO {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(20)
+  @IsOptional()
+  name?: string;
+  
 }

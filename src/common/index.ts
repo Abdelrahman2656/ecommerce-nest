@@ -5,4 +5,6 @@ export * from './Guards'
 export * from './Security'
 export * from './Service'
 export * from './Utils'
+export * from './Interceptor'
+export * from './pipes'
 
