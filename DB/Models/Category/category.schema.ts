@@ -4,7 +4,7 @@ import slugify from 'slugify';
 import { IICategory } from './category.interface';
 
 //interface
-interface IImage {
+export interface IImage {
   secure_url: string;
   public_id: string;
 }
