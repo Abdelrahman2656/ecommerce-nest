@@ -1,8 +1,8 @@
 import {
-    CallHandler,
-    ExecutionContext,
-    Injectable,
-    NestInterceptor,
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -30,6 +30,7 @@ export class CloudInterceptor implements NestInterceptor {
     if (file) {
       const folderId = uuid();
       const folder = `Ecommerce-Nest/User/${authUser._id}/${folder_name}/${folderId}`;
+     
       const {secure_url,public_id} = await this.cloudServices.upload({ path: file.path, folder });
       request.body.image = {secure_url,public_id ,folderId}
     }

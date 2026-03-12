@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import cloudinary from 'Config/cloud.config';
+import { IImage } from 'DB/Models/Category/category.schema';
 interface IUpload {
   path: string;
   folder?: string;
@@ -13,7 +14,7 @@ export class CloudServices {
   }
   //upload files
   async uploadFiles(files: Express.Multer.File[], folder: string) {
-    let images: object[] = [];
+    let images: IImage[] = [];
     for (const file of files) {
       const { secure_url, public_id } = await this.upload({
         path: file.path,

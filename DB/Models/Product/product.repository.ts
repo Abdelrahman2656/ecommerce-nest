@@ -6,7 +6,7 @@ import { Model } from "mongoose";
 
 @Injectable()
 export class ProductRepository extends DBservice<TProduct>{
-constructor( @InjectModel(Product.name) productModel:Model<TProduct> ){
+constructor( @InjectModel(Product.name)  productModel:Model<TProduct> ){
     super(productModel)
 }
 }

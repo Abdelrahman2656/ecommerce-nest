@@ -4,7 +4,7 @@ import { Category, type IImage } from '../Category/category.schema';
 import { DiscountType } from 'src/common';
 import { User } from '../User/user.schema';
 //interface
-interface IAttribute {
+export interface IAttribute {
   key: string;
   value: string;
 }
@@ -41,16 +41,16 @@ export class Product {
   @Prop({ type: [String] })
   colors: string[];
   @Prop({ type: [String] })
-  size: string[];
-  @Prop({ type: [{ key: String, value: String }] })
+  sizes: string[];
+  @Prop({ type: [{ key: String, value: String ,_id:false }] })
   attribute: IAttribute[];
   //number
   @Prop({ type: Number, required: true, min: 1 })
   price: number;
   @Prop({ type: Number, default: 0, min: 0 })
   discount: number;
-  @Prop({ type: Number, enum: DiscountType, default: DiscountType.PERCENTAGE })
-  discountType: number;
+  @Prop({ type: String, enum: DiscountType, default: DiscountType.PERCENTAGE })
+  discountType: string;
   @Prop({
     type: Number,
     required: true,
@@ -66,9 +66,9 @@ export class Product {
   @Prop({type:Number , min:1 , max:5 ,default:5})
   rate: number;
   //images
-  @Prop({type:{ secure_url: String, public_id: String } })
+  @Prop({type:{ secure_url: String, public_id: String,_id:false } })
   mainImage: IImage;
-  @Prop({type: [{ secure_url: String, public_id: String }] })
+  @Prop({type: [{ secure_url: String, public_id: String ,_id:false}] })
   subImages: IImage[];
   //objectId
   @Prop({type:SchemaTypes.ObjectId , ref:User.name ,required:true})

@@ -31,5 +31,6 @@ export const messages = {
   },
 
   category: generateMessage('Category'),
+    product: { ...generateMessage("Product"), outStock: "Out Of Stock",lessThan: "Must Be Less Than 100" },
 
 };

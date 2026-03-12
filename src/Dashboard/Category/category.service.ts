@@ -9,7 +9,7 @@ import {
 import { CloudServices, messages } from 'src/common';
 import { TUser } from 'DB/Models/User/user.schema';
 import { TCategory } from 'DB/Models/Category/category.schema';
-import { Types } from 'mongoose';
+import { QueryFilter, Types } from 'mongoose';
 import slugify from 'slugify';
 
 @Injectable()
@@ -18,6 +18,9 @@ export class CategoryService {
     private categoryRepository: CategoryRepository,
     private readonly cloudServices: CloudServices,
   ) {}
+  async findOne(filter:QueryFilter<TCategory>){
+    return await this.categoryRepository.findOne(filter)
+  }
   //create
   async create(
     CreateCategoryDTO: CreateCategoryDTO,
