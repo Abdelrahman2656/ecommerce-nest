@@ -3,10 +3,11 @@ import { CreateCategoryDTO, UpdateCategoryDTO } from './DTO';
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CloudServices, messages } from 'src/common';
+import { CloudServices, messages, UserRole } from 'src/common';
 import { TUser } from 'DB/Models/User/user.schema';
 import { TCategory } from 'DB/Models/Category/category.schema';
 import { QueryFilter, Types } from 'mongoose';
@@ -56,6 +57,10 @@ export class CategoryService {
     }
     return createdCategory;
   }
+  //find all 
+  async findAll(){
+    
+  }
   //update
   async update(
     id: Types.ObjectId,
@@ -92,5 +97,28 @@ export class CategoryService {
       throw new BadRequestException(messages.category.failToUpdate);
     }
     return categoryUpdated;
+  }
+  //delete
+  async delete(id:Types.ObjectId , user:TUser):Promise<TCategory>{
+    //user id
+    const authUser = user._id
+    //check category exist
+    const categoryExist = await this.findOne({ _id:id })
+    if(!categoryExist)throw new NotFoundException(messages.category.notFound)
+    //check user
+  if (categoryExist.createdBy.toString() !== authUser.toString() || !UserRole.ADMIN ) {
+    throw new ForbiddenException(messages.category.notAllowed);
+  
+  }
+    //delete image
+    if(categoryExist.image?.public_id){
+     await this.cloudServices.deleteFolder(`Ecommerce-Nest/User/${categoryExist.createdBy._id}/Category/${categoryExist.folderId}`)
+    }
+    //find and delete
+    const categoryDeleted = await this.categoryRepository.findOneAndDelete({ _id:id})
+    if(!categoryDeleted){
+     throw new BadRequestException(messages.category.failToDelete)
+    }
+    return categoryDeleted
   }
 }

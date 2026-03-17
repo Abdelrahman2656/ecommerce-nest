@@ -7,7 +7,9 @@ import { resolve } from 'path';
 import { AuthModule } from './Auth/auth.module';
 import { DashboardModule } from './Dashboard/dashboard.module';
 import { SellerModule } from './Seller/seller.module';
-import { UserModule } from './User/user.module';
+import { UserModule } from './User/user/user.module';
+import { CategoryModule } from './User/Category/category.module';
+
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { UserModule } from './User/user.module';
     MongooseModule.forRoot(process.env.DB_URL as string),
     AuthModule,
     UserModule,
+    CategoryModule,
     DashboardModule,
     SellerModule,
   ],

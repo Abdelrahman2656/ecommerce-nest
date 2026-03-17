@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Post,
   Put,
@@ -27,7 +28,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDTO, UpdateCategoryDTO } from './DTO';
 
 @Controller('dashboard/category')
-@ApiTags('Category Group')
+@ApiTags('Category Group Admin')
 @Auth(UserRole.ADMIN)
 @CloudName('Category')
 export class CategoryController {
@@ -63,5 +64,14 @@ export class CategoryController {
       message: messages.category.updateSuccessfully,
       CategoryUpdated: category,
     };
+  }
+  //delete category
+  @Delete(":id")
+  @UseInterceptors(
+    FileInterceptor('file', multerOptions(cloudValidation.image)),CloudInterceptor
+  )
+  async delete(@User() user:TUser ,@Param ('id',PipeParseObjectId) id:Types.ObjectId ){
+   const category = await this.categoryService.delete(id, user)
+   return {message:messages.category.deleteSuccessfully ,success:true , CategoryDataDeleted:category}
   }
 }

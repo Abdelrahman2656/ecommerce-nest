@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import slugify from 'slugify';
 import { IICategory } from './category.interface';
-
 //interface
 export interface IImage {
   secure_url: string;
@@ -31,5 +31,7 @@ export class Category implements IICategory{
   createdBy: Types.ObjectId;
 }
 export const categorySchema = SchemaFactory.createForClass(Category);
+//pagination
+categorySchema.plugin(mongoosePaginate)
 //type
 export type TCategory = HydratedDocument<Category> & Document;
