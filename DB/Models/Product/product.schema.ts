@@ -38,9 +38,9 @@ export class Product {
   description: string;
   @Prop({ type: String })
   folderId: string;
-  @Prop({ type: [String] })
+  @Prop({ type: Array<String> })
   colors: string[];
-  @Prop({ type: [String] })
+  @Prop({ type: Array<String> })
   sizes: string[];
   @Prop({ type: [{ key: String, value: String ,_id:false }] })
   attribute: IAttribute[];
