@@ -19,5 +19,6 @@ import { categoryModel } from 'DB/Models/Category/category.models';
     CategoryService,
     CategoryRepository
   ],
+  
 })
 export class ProductModule {}

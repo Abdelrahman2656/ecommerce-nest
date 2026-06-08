@@ -31,6 +31,16 @@ export const messages = {
   },
 
   category: generateMessage('Category'),
-    product: { ...generateMessage("Product"), outStock: "Out Of Stock",lessThan: "Must Be Less Than 100" },
-
+  product: {
+    ...generateMessage('Product'),
+    outStock: 'Out Of Stock',
+    lessThan: 'Must Be Less Than 100',
+  },
+   cart: {
+    ...generateMessage("Cart"),
+    outStock: "Out Of Stock",
+    deleteAllSuccessfully: "All Cart Are Deleted Successfully",
+    empty:"Cart Is Empty",
+    notFoundOrOutStock:'Product Not Exist Or Out Of Stock'
+  },
 };

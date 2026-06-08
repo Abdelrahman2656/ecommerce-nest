@@ -46,6 +46,7 @@ export class CategoryService {
       {
         page,
         limit,
+        sort:{createdBy:-1},
         customLabels: { totalDocs: 'Total Category', docs: 'Category Data' },
         lean:true,
         populate:[{

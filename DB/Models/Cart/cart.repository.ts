@@ -6,7 +6,7 @@ import { cartModel } from "./cart.models";
 import { Model } from "mongoose";
 
 @Injectable()
-export class cartRepository extends DBservice<TCart>{
+export class CartRepository extends DBservice<TCart>{
 constructor(@InjectModel(Cart.name) private cartModel:Model<TCart>){
 super(cartModel)
 }

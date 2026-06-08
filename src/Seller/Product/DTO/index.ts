@@ -23,6 +23,7 @@ export class CreateProductDTO {
   @MaxLength(10)
   @MinLength(4)
   title: string;
+  
 
   @IsString()
   @IsNotEmpty()

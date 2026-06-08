@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, SchemaType, SchemaTypes, Types } from 'mongoose';
-import { Category, type IImage } from '../Category/category.schema';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { DiscountType } from 'src/common';
+import { Category, type IImage } from '../Category/category.schema';
 import { User } from '../User/user.schema';
 //interface
 export interface IAttribute {
@@ -42,7 +42,7 @@ export class Product {
   colors: string[];
   @Prop({ type: Array<String> })
   sizes: string[];
-  @Prop({ type: [{ key: String, value: String ,_id:false }] })
+  @Prop({ type: [{ key: String, value: String, _id: false }] })
   attribute: IAttribute[];
   //number
   @Prop({ type: Number, required: true, min: 1 })
@@ -61,23 +61,28 @@ export class Product {
     },
   })
   finalPrice: number;
-  @Prop({type:Number , default:1 ,min:0 })
+  @Prop({ type: Number, default: 1, min: 0 })
   stock: number;
-  @Prop({type:Number , min:1 , max:5 ,default:5})
+  @Prop({ type: Number, min: 1, max: 5, default: 5 })
   rate: number;
   //images
-  @Prop({type:{ secure_url: String, public_id: String,_id:false } })
+  @Prop({ type: { secure_url: String, public_id: String, _id: false } })
   mainImage: IImage;
-  @Prop({type: [{ secure_url: String, public_id: String ,_id:false}] })
+  @Prop({ type: [{ secure_url: String, public_id: String, _id: false }] })
   subImages: IImage[];
   //objectId
-  @Prop({type:SchemaTypes.ObjectId , ref:User.name ,required:true})
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
   createdBy: Types.ObjectId;
-  @Prop({type:SchemaTypes.ObjectId , ref:User.name ,required:true , default:function(){
-    return this.createdBy
-  }})
+  @Prop({
+    type: SchemaTypes.ObjectId,
+    ref: User.name,
+    required: true,
+    default: function () {
+      return this.createdBy;
+    },
+  })
   updatedBy: Types.ObjectId;
-  @Prop({type:SchemaTypes.ObjectId , ref:Category.name ,required:true})
+  @Prop({ type: SchemaTypes.ObjectId, ref: Category.name, required: true })
   category: Types.ObjectId;
 }
 export const productSchema = SchemaFactory.createForClass(Product);

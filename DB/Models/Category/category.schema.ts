@@ -31,6 +31,8 @@ export class Category implements IICategory{
   createdBy: Types.ObjectId;
 }
 export const categorySchema = SchemaFactory.createForClass(Category);
+//index
+categorySchema.index({createdBt:-1})
 //pagination
 categorySchema.plugin(mongoosePaginate)
 //type
