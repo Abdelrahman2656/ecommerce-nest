@@ -8,6 +8,8 @@ import {
   QueryFilter,
   QueryOptions,
   Types,
+  UpdateQuery,
+  UpdateWriteOpResult,
 } from 'mongoose';
 export abstract class DBservice<T> {
   //constructor
@@ -79,5 +81,17 @@ export abstract class DBservice<T> {
   ): Promise<PaginateResult<T>> {
     const paginateModel = this._model as PaginateModel<T>;
     return paginateModel.paginate(filter || {}, options || {});
+  }
+  //update one
+updateOne(
+  filter: QueryFilter<T>,
+  update: UpdateQuery<T>,
+  options?:any,
+) {
+  return this._model.updateOne(filter, update, options);
+}
+  //delete 
+  async deleteOne(filter?: QueryFilter<T>){
+     return  this._model.deleteOne(filter || {});
   }
 }

@@ -43,4 +43,5 @@ export const messages = {
     empty:"Cart Is Empty",
     notFoundOrOutStock:'Product Not Exist Or Out Of Stock'
   },
+  order: generateMessage('Order'),
 };

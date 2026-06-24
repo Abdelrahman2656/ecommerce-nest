@@ -10,6 +10,7 @@ import { SellerModule } from './Seller/seller.module';
 import { UserModule } from './User/user/user.module';
 import { CategoryModule } from './User/Category/category.module';
 import { CartModule } from './Dashboard/cart/cart.module';
+import { OrderModule } from './User/Order/order.module';
 
 
 @Module({
@@ -29,9 +30,9 @@ import { CartModule } from './Dashboard/cart/cart.module';
     }),
     MongooseModule.forRoot(process.env.DB_URL as string),
     AuthModule,
-    UserModule,
-   
+    UserModule,   
     CategoryModule,
+    OrderModule,
     DashboardModule,
     SellerModule,
   ],
