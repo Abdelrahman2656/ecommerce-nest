@@ -24,7 +24,7 @@ export class Order {
     type: String,
     enum: OrderStatus,
     default: function () {
-      this.OrderStatus == PaymentMethod.CASH
+      return this.paymentMethod == PaymentMethod.CASH
         ? OrderStatus.PLACED
         : OrderStatus.PENDING;
     },
@@ -40,8 +40,11 @@ export class Order {
         discount: Number,
         finalPrice: Number,
         quantity: Number,
+        mainImage:{ type: { secure_url: String, public_id: String, _id: false }}
       },
+      
     ],
+    _id:false,
   })
   productItems: IProductItem[];
 

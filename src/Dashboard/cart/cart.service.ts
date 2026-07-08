@@ -37,6 +37,7 @@ export class CartService {
         productId: productExist._id,
         quantity,
         finalPrice: productExist.finalPrice,
+        mainImage:productExist.mainImage
       },
     ],
       })
@@ -59,6 +60,7 @@ if(!match){
     productId: productExist._id,
     quantity,
     finalPrice: productExist.finalPrice,
+    mainImage:productExist.mainImage
   })
 }
 const createdCart = await cart.save()

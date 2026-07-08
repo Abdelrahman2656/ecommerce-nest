@@ -90,6 +90,14 @@ updateOne(
 ) {
   return this._model.updateOne(filter, update, options);
 }
+//find one and update
+findOneAndUpdate(
+  filter: QueryFilter<T>,
+  update: UpdateQuery<T>,
+  options?:any,
+) {
+  return this._model.findOneAndUpdate(filter, update, options);
+}
   //delete 
   async deleteOne(filter?: QueryFilter<T>){
      return  this._model.deleteOne(filter || {});

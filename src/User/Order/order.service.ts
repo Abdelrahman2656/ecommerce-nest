@@ -1,11 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CartRepository } from 'DB/Models/Cart/cart.repository';
 import { OrderRepository } from 'DB/Models/Order/order.repository';
 import { TOrder } from 'DB/Models/Order/order.schema';
 import { ProductRepository } from 'DB/Models/Product/product.repository';
 import { TUser } from 'DB/Models/User/user.schema';
-import { messages, PaymentMethod } from 'src/common';
+import { messages, OrderStatus, PaymentMethod } from 'src/common';
 import { CreateOrderDTO } from './DTO';
+import { Types } from 'mongoose';
+import { StripeServices } from 'src/common/Payment/Stripe/stripe.service';
 
 @Injectable()
 export class OrderService {
@@ -13,11 +19,12 @@ export class OrderService {
     private orderRepository: OrderRepository,
     private cartRepository: CartRepository,
     private productRepository: ProductRepository,
-  ) {} 
+    private stripeServices: StripeServices,
+  ) {}
   //create order
   async create(createOrderDTO: CreateOrderDTO, user: TUser): Promise<TOrder> {
     //get data from body
-    const { address, paymentMethod } = createOrderDTO;
+    const { address, paymentMethod  } = createOrderDTO;
     const userId = user._id;
     //find cart exist
     const cartExistence = await this.cartRepository.findOne(
@@ -41,6 +48,7 @@ export class OrderService {
       cart: cartExistence._id,
       address,
       paymentMethod,
+      
       productItems: cartExistence.products.map((obj) => {
         return {
           id: obj.productId._id,
@@ -48,6 +56,7 @@ export class OrderService {
           price: obj.productId['price'],
           discount: obj.productId['discount'],
           finalPrice: obj.productId['finalPrice'],
+          mainImage: obj.mainImage,
           quantity: obj.quantity,
         };
       }),
@@ -57,8 +66,8 @@ export class OrderService {
     };
     //create order
     const createdOrder = await this.orderRepository.create(order);
-    if(!createdOrder){
-    throw new BadRequestException(messages.order.failToCreate)
+    if (!createdOrder) {
+      throw new BadRequestException(messages.order.failToCreate);
     }
     //update stock and clear cart
     if (paymentMethod == PaymentMethod.CASH) {
@@ -70,9 +79,41 @@ export class OrderService {
         );
       }
       //empty cart
-       cartExistence.products = []
-       await cartExistence.save()
+      cartExistence.products = [];
+      await cartExistence.save();
     }
-    return createdOrder
+    return createdOrder;
+  }
+  //pay with stripe
+  async payWithStripe(orderId: Types.ObjectId, user: TUser) {
+    //check order exist
+    const orderExistence = await this.orderRepository.findOne({
+      _id: orderId,
+      orderStatus: OrderStatus.PENDING,
+    });
+    if (!orderExistence) {
+      throw new NotFoundException(messages.order.notFound);
+    }
+    //prepare
+    const line_items = orderExistence.productItems.map((product) => {
+      return {
+        quantity: product.finalPrice,
+        price_data: {
+          currency: 'egp',
+          product_data: {
+            name: product.title,
+            images: [product.mainImage.secure_url],
+          },
+          unit_amount: product.finalPrice * 100,
+        },
+      };
+    });
+
+    const session = await this.stripeServices.checkOut({
+      line_items,
+      customer_email: user['email'] || user.email,
+      metadata: { orderId: orderExistence.id },
+    });
+    return session;
   }
 }

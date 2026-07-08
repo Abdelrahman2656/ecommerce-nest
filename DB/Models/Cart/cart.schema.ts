@@ -16,6 +16,8 @@ export class Cart {
         productId: { type: SchemaTypes.ObjectId, ref: Product.name },
         quantity: { type: Number, required: true },
         finalPrice: { type: Number, required: true },
+        mainImage: { type: { secure_url: String, public_id: String, _id: false } },
+        _id:false
       }),
     ],
   })

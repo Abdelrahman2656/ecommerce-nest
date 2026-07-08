@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from "class-validator"
-import { PaymentMethod } from "src/common"
+import { OrderStatus, PaymentMethod } from "src/common"
 
 export class CreateOrderDTO{
     
@@ -9,4 +9,6 @@ export class CreateOrderDTO{
     @IsEnum(PaymentMethod)
     @IsString()
     paymentMethod:string
+
+   
 }
