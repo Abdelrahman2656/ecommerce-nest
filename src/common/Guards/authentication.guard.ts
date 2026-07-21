@@ -1,14 +1,19 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { TokenService } from "../Service";
+import { Reflector } from "@nestjs/core";
 import { UserRepository } from "DB/Models/User/user.repository";
+import { TokenService } from "../Service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private tokenService:TokenService , private userRepository:UserRepository){}
+    constructor(private tokenService:TokenService , private userRepository:UserRepository , private reflector:Reflector){}
 async canActivate(context: ExecutionContext):Promise<boolean>  {
     //get request
-    const request = context.switchToHttp().getRequest() 
+    const request = context.switchToHttp().getRequest()
+    const publicDecorator = this.reflector.getAllAndMerge('public',[
+        context.getClass(),
+        context.getHandler()
+    ]) 
+    if(publicDecorator.length) return true
     //get token
     const {authorization} = request.headers
     //check bearer token 

@@ -94,9 +94,12 @@ updateOne(
 findOneAndUpdate(
   filter: QueryFilter<T>,
   update: UpdateQuery<T>,
-  options?:any,
-) {
-  return this._model.findOneAndUpdate(filter, update, options);
+  options?: QueryOptions<T>,
+): Promise<T | null> {
+  return this._model.findOneAndUpdate(filter, update, {
+    new: true,
+    ...options,
+  });
 }
   //delete 
   async deleteOne(filter?: QueryFilter<T>){

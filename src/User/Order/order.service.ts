@@ -8,10 +8,11 @@ import { OrderRepository } from 'DB/Models/Order/order.repository';
 import { TOrder } from 'DB/Models/Order/order.schema';
 import { ProductRepository } from 'DB/Models/Product/product.repository';
 import { TUser } from 'DB/Models/User/user.schema';
-import { messages, OrderStatus, PaymentMethod } from 'src/common';
-import { CreateOrderDTO } from './DTO';
+import { Request } from 'express';
 import { Types } from 'mongoose';
+import { messages, OrderStatus, PaymentMethod } from 'src/common';
 import { StripeServices } from 'src/common/Payment/Stripe/stripe.service';
+import { CreateOrderDTO } from './DTO';
 
 @Injectable()
 export class OrderService {
@@ -24,7 +25,7 @@ export class OrderService {
   //create order
   async create(createOrderDTO: CreateOrderDTO, user: TUser): Promise<TOrder> {
     //get data from body
-    const { address, paymentMethod  } = createOrderDTO;
+    const { address, paymentMethod } = createOrderDTO;
     const userId = user._id;
     //find cart exist
     const cartExistence = await this.cartRepository.findOne(
@@ -48,7 +49,7 @@ export class OrderService {
       cart: cartExistence._id,
       address,
       paymentMethod,
-      
+
       productItems: cartExistence.products.map((obj) => {
         return {
           id: obj.productId._id,
@@ -115,5 +116,30 @@ export class OrderService {
       metadata: { orderId: orderExistence.id },
     });
     return session;
+  }
+  //webhook
+  async webhook(req: Request) {
+    const sessionObj = await this.stripeServices.webhook(req);
+    //get order id
+    const orderId = sessionObj.metadata.orderId;
+    //update order status
+    const order = await this.orderRepository.findOneAndUpdate(
+      { _id: orderId },
+      { orderStatus: OrderStatus.PLACED },
+    );
+    if (order) {
+      // reduce stock
+      for (const product of order['productItems']) {
+        await this.productRepository.updateOne(
+          { _id: product.id },
+          { $inc: { stock: -product.quantity } },
+        );
+      }
+      //clear cart
+      await this.cartRepository.findOneAndUpdate(
+        { _id: order.cart },
+        { products: [] },
+      );
+    }
   }
 }

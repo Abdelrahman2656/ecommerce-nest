@@ -6,7 +6,7 @@ import { Order, TOrder } from "./order.schema";
 
 @Injectable()
 export class OrderRepository extends DBservice<TOrder>{
-    constructor(@InjectModel(Order.name) private readonly orderModel:Model<TOrder>){
+    constructor(@InjectModel(Order.name)  orderModel:Model<TOrder>){
         super(orderModel)
     }
 }

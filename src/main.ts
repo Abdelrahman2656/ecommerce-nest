@@ -3,9 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { raw } from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{rawBody:true});
   //helmet
   app.use(helmet());
   //cors
@@ -22,7 +23,8 @@ async function bootstrap() {
     .build();
   const documentation = SwaggerModule.createDocument(app, swagger);
   SwaggerModule.setup('swagger', app, documentation);
-
+  //webhook
+  app.use('/user/order/webhook',raw({type: 'application/json'}))
   //validation
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
